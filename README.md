@@ -61,8 +61,7 @@ CREATE TABLE IF NOT EXISTS film_likes (
         REFERENCES users(user_id) ON DELETE CASCADE
 );
 
--- Взаимная дружба пользователей
--- Храним одну запись на пару (user_id < friend_id)
+-- Односторонняя дружба пользователей
 CREATE TABLE IF NOT EXISTS user_friends (
     user_id    BIGINT NOT NULL,
     friend_id  BIGINT NOT NULL,
