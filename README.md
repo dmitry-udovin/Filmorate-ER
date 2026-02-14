@@ -64,8 +64,11 @@ CREATE TABLE IF NOT EXISTS film_likes (
 -- Взаимная дружба пользователей
 -- Храним одну запись на пару (user_id < friend_id)
 CREATE TABLE IF NOT EXISTS user_friends (
-    user_id    integer NOT NULL,
-    friend_id  integer NOT NULL,
+    user_id    BIGINT NOT NULL,
+    friend_id  BIGINT NOT NULL,
+    status varchar(20) NOT NULL DEFAULT 'UNCONFIRMED',
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    confirmed_at TIMESTAMP WITH TIME ZONE,
 
     CONSTRAINT user_friends_pk PRIMARY KEY (user_id, friend_id),
 
@@ -76,7 +79,7 @@ CREATE TABLE IF NOT EXISTS user_friends (
         REFERENCES users(user_id) ON DELETE CASCADE,
 
     CONSTRAINT user_friends_no_self CHECK (user_id <> friend_id),
-    CONSTRAINT user_friends_ordered CHECK (user_id < friend_id)
+    CONSTRAINT user_friends_status_check CHECK (status IN ('UNCONFIRMED', 'CONFIRMED'))
 );
 
 -- Жанры фильмов (многие-ко-многим)
